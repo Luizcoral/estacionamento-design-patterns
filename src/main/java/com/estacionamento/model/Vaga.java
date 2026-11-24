@@ -1,20 +1,36 @@
 package com.estacionamento.model;
 
-/**
- * Representa uma vaga do estacionamento.
- * Servirá como o contexto para o padrão State que será integrado na sequência.
- */
+import com.estacionamento.state.EstadoVaga;
+import com.estacionamento.state.VagaLivreState;
+
 public class Vaga {
     private int numero;
     private Veiculo veiculoAtual;
+    private EstadoVaga estado;
 
     public Vaga(int numero) {
         this.numero = numero;
-        this.veiculoAtual = null;
+        this.estado = new VagaLivreState();
+    }
+
+    public void ocupar(Veiculo veiculo) {
+        estado.ocupar(this, veiculo);
+    }
+
+    public void liberar() {
+        estado.liberar(this);
+    }
+
+    public boolean estaOcupada() {
+        return veiculoAtual != null;
     }
 
     public int getNumero() {
         return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
     public Veiculo getVeiculoAtual() {
@@ -25,12 +41,19 @@ public class Vaga {
         this.veiculoAtual = veiculoAtual;
     }
 
-    public boolean estaOcupada() {
-        return this.veiculoAtual != null;
+    public EstadoVaga getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoVaga estado) {
+        this.estado = estado;
     }
 
     @Override
     public String toString() {
-        return "Vaga #" + numero + " [" + (estaOcupada() ? "Ocupada por " + veiculoAtual : "Livre") + "]";
+        if (estaOcupada()) {
+            return "Vaga #" + numero + " [" + estado.getNome() + " por " + veiculoAtual + "]";
+        }
+        return "Vaga #" + numero + " [" + estado.getNome() + "]";
     }
 }
