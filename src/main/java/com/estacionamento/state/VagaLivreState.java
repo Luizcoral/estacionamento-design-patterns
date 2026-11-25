@@ -1,14 +1,17 @@
 package com.estacionamento.state;
 
-import com.estacionamento.model.Vaga;
 import com.estacionamento.model.Veiculo;
+import com.estacionamento.model.Vaga;
 
+/**
+ * Estado "Livre": a vaga aceita ocupação e rejeita liberação.
+ */
 public class VagaLivreState implements EstadoVaga {
 
     @Override
     public void ocupar(Vaga vaga, Veiculo veiculo) {
         if (veiculo == null) {
-            throw new IllegalArgumentException("O veículo não pode ser nulo ao ocupar uma vaga.");
+            throw new IllegalArgumentException("O veiculo nao pode ser nulo.");
         }
         vaga.setVeiculoAtual(veiculo);
         vaga.setEstado(new VagaOcupadaState());
@@ -16,7 +19,8 @@ public class VagaLivreState implements EstadoVaga {
 
     @Override
     public void liberar(Vaga vaga) {
-        throw new IllegalStateException("A vaga #" + vaga.getNumero() + " já está livre.");
+        throw new IllegalStateException(
+                "Vaga #" + vaga.getNumero() + " ja esta livre e nao pode ser liberada novamente.");
     }
 
     @Override
